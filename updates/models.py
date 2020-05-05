@@ -2,20 +2,28 @@ from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse
 from django.core.serializers import serialize
+import json
 
 
 def upload_image(instance, filename):
     return f"=updates/{instance.user}/{filename}"
 
 
+def returnPythonDict(json_data):
+    all_array = json.loads(json_data)
+    python_dict = [x.get('fields') for x in all_array]
+    return json.dumps(python_dict)
+
+
 class UpdateQuerySet(models.QuerySet):
     def serialized(self, instance):
         if instance is not None:
             qs = self.get(id=instance.id)
-            return serialize("json", [qs, ])
+            json_data = serialize("json", [qs, ],)
+            return returnPythonDict(json_data)
         else:
-            qs = self
-            return serialize("json", qs)
+            json_data = serialize("json", self)
+            return returnPythonDict(json_data)
 
 
 class UpdateManager(models.Manager):
