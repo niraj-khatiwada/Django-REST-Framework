@@ -2,7 +2,7 @@ import requests
 
 BASE_URL = 'http://localhost:8000/'
 ENDPOINT = 'api/'
+ID = 7
+response = requests.get(BASE_URL + ENDPOINT + str(ID))
 
-response = requests.get(BASE_URL + ENDPOINT)
-json_data = response.json()
-print(type(json_data))
+print(response.json())
