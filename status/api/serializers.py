@@ -11,5 +11,5 @@ class StatusSerializer(serializers.ModelSerializer):
         content = attrs.get('content')
         content = None if content == '' else content
         if content is None:
-            raise serializers.ValidationError("COnjsbaks has")
+            raise serializers.ValidationError("Content is required")
         return attrs

@@ -12,6 +12,15 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 
 
+def is_json(json_data):
+    try:
+        real_json = json.loads(json_data)
+        is_valid = True
+    except ValueError:
+        is_valid = False
+    return is_valid
+
+
 class StatusAPIListView(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, ListAPIView):
     authentication_classes = []
     permission_classes = []
@@ -25,26 +34,37 @@ class StatusAPIListView(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, 
         return qs
 
     def get_object(self):
-        pk = self.request.GET.get('pk')
+        pk = self.request.GET.get('pk') or self.passed_id
         try:
-            obj = get_object_or_404(Status, pk=pk)
+            obj = get_object_or_404(self.queryset(), pk=pk)
         except:
             raise Http404
         return obj
 
     def get(self, request, *args, **kwargs):
-        passed_id = self.request.GET.get('pk')
-        obj = self.get_object() if passed_id else None
-        if obj is not None:
+        url_passed_id = self.request.GET.get('pk')
+        json_data = {}
+        body_ = self.request.body
+        if is_json(body_):
+            json_data = json.loads(body_)
+        new_passed_id = json_data.get('pk', None)
+        passed_id = url_passed_id or new_passed_id or None
+        self.passed_id = new_passed_id
+        if passed_id is not None:
             return self.retrieve(request, *args, **kwargs)
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        passed_id = self.request.GET.get('pk')
-        instance = self.get_object() if passed_id else None
-        if instance is not None:
-            return self.update(request, *args, **kwargs)
         return super().create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
 
 
 # class StatusAPICreateView(CreateAPIView):

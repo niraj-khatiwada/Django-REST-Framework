@@ -1,15 +1,18 @@
 import requests
+import json
 
 BASE_URL = 'http://localhost:8000/'
 ENDPOINT = 'api/'
-ID = 9
-a = {'pk': ID}
 
 
-def perform_request(ID, method='get'):
+data = {'pk': 9}
+
+
+def perform_request(method='get'):
     return requests.request(
-        method=method, url=BASE_URL + ENDPOINT, params=a, data=a)
+        method=method, url=BASE_URL + ENDPOINT, data=json.dumps(data), headers={'content-type': 'application/json'})
 
 
-response = perform_request(9, 'get')
+response = perform_request('get')
+
 print(response.json())
