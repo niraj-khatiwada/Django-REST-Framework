@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 
 class StatusQuerySet(models.QuerySet):
@@ -15,7 +16,8 @@ def upload_image_to(instance, filename):
 
 
 class Status(models.Model):
-    user = models.ForeignKey()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     content = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=upload_image_to, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -24,4 +26,8 @@ class Status(models.Model):
     objects = StatusManager()
 
     def __str__(self):
-        return self.user + self.content
+        return f'{self.user} {self.content}'
+
+    class Meta:
+        verbose_name = "Status Post"
+        verbose_name_plural = 'Status Posts'
