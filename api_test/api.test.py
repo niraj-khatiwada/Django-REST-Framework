@@ -33,7 +33,7 @@ AUTH = 'accounts/jwt-auth/'
 
 
 def send_request(method='get', ID=None, data=None, AUTH=None, token=None):
-    headers = {}
+    headers = {'Content-Type': 'application/json'}
     if token is not None:
         headers['Authorization'] = 'JWT ' + token
     AUTH = AUTH if AUTH is not None else ''
@@ -41,7 +41,7 @@ def send_request(method='get', ID=None, data=None, AUTH=None, token=None):
     data = data if data is not None else {}
 
     response = requests.request(
-        method=method, url=BASE_URL + ENDPOINT + AUTH + ID, headers=headers, data=data)
+        method=method, url=BASE_URL + ENDPOINT + AUTH + ID, headers=headers, data=json.dumps(data))
     return response
 
 
@@ -49,7 +49,8 @@ data = {
     'username': 'niraj',
     'password': 'nepal123'
 }
-token = send_request(method='post', data=data, AUTH=AUTH).json()
+token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJ1c2VybmFtZSI6Im5pcmFqIiwiZXhwIjoxNTg4ODczOTM5LCJlbWFpbCI6Im5pcmFqQGdtYWlsLmNvbSIsIm9yaWdfaWF0IjoxNTg4ODczNjM5fQ.PbE_ikcIbtkkUP5h5FvnbeCqORUhf0aW8Ffl4QJX-uI'
+token = send_request(method='post', data=data, AUTH=AUTH, token=token).json()
 logging.info(token)
 
 
