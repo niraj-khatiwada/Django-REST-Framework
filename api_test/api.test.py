@@ -29,11 +29,11 @@ logging.basicConfig(level=logging.DEBUG)
 # print(check_palindrome(string))
 BASE_URL = 'http://localhost:8000/'
 ENDPOINT = 'api/'
-AUTH = 'jwt-auth/'
+AUTH = 'accounts/jwt-auth/'
 
 
 def send_request(method='get', ID=None, data=None, AUTH=None, token=None):
-    headers = {'Content-Type': 'application/json'}
+    headers = {}
     if token is not None:
         headers['Authorization'] = 'JWT ' + token
     AUTH = AUTH if AUTH is not None else ''
@@ -41,7 +41,7 @@ def send_request(method='get', ID=None, data=None, AUTH=None, token=None):
     data = data if data is not None else {}
 
     response = requests.request(
-        method=method, url=BASE_URL + ENDPOINT + AUTH + ID, headers=headers, data=json.dumps(data))
+        method=method, url=BASE_URL + ENDPOINT + AUTH + ID, headers=headers, data=data)
     return response
 
 
@@ -53,10 +53,10 @@ token = send_request(method='post', data=data, AUTH=AUTH).json()
 logging.info(token)
 
 
-post_data = {
-    'content': 'Fresh updated content from Request'
-}
+# post_data = {
+#     'content': 'Fresh updated content from Request'
+# }
 
-res = send_request(method='delete',
-                   token=token.get('token'), ID=12).json()
-logging.debug(res)
+# res = send_request(method='delete',
+#                    token=token.get('token'), ID=12).json()
+# logging.debug(res)
