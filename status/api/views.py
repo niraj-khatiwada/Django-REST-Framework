@@ -3,16 +3,12 @@ from ..models import Status
 from .serializers import StatusSerializer
 
 from rest_framework.mixins import CreateModelMixin, UpdateModelMixin, DestroyModelMixin
-from rest_framework.authentication import SessionAuthentication
 
 
 class StatusAPIListView(CreateModelMixin, ListAPIView):
-    authentication_classes = [SessionAuthentication]
-    permission_classes = []
     serializer_class = StatusSerializer
 
     def get_queryset(self):
-        print("Logged in user", self.request.user)
         qs = Status.objects.all()
         return qs
 
@@ -24,8 +20,6 @@ class StatusAPIListView(CreateModelMixin, ListAPIView):
 
 
 class StatusAPIRetrieveView(UpdateModelMixin, DestroyModelMixin, RetrieveAPIView):
-    authentication_classes = [SessionAuthentication]
-    permission_classes = []
     serializer_class = StatusSerializer
 
     def get_object(self):

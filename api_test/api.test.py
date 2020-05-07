@@ -1,18 +1,46 @@
 import requests
 import json
 
+
+# data = {'pk': 9}
+
+
+# def perform_request(method='get'):
+#     return requests.request(
+#         method=method, url=BASE_URL + ENDPOINT, data=data, headers={'content-type': 'application/json'})
+
+
+# response = perform_request('get')
+
+# print(response.json())
+
+
+# string = input("Enter a string: ")
+
+
+# def check_palindrome(string):
+#     if string.lower() == string.lower()[::-1]:
+#         return "The string is palindrome"
+#     else:
+#         return "Not a palindrome"
+import logging
+logging.basicConfig(level=logging.DEBUG)
+
+# print(check_palindrome(string))
 BASE_URL = 'http://localhost:8000/'
 ENDPOINT = 'api/'
 
 
-data = {'pk': 9}
+def send_request(method='get', ID=None, data=None):
+    ID = str(ID) if ID is not None else ''
+    data = data if data is not None else {}
+    response = requests.request(
+        method=method, url=BASE_URL + ENDPOINT + ID, headers={'content-type': 'application/json'}, data=data)
+    return response
 
 
-def perform_request(method='get'):
-    return requests.request(
-        method=method, url=BASE_URL + ENDPOINT, data=data, headers={'content-type': 'application/json'})
-
-
-response = perform_request('get')
-
-print(response.json())
+data = {
+    'content': 'Content from request'
+}
+res = send_request(method='delete', ID=4).json()
+logging.info(res)
