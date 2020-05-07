@@ -33,12 +33,15 @@ AUTH = 'jwt-auth/'
 
 
 def send_request(method='get', ID=None, data=None, AUTH=None, token=None):
-    token = token if token is not None else {}
+    headers = {'Content-Type': 'application/json'}
+    if token is not None:
+        headers['Authorization'] = 'JWT ' + token
     AUTH = AUTH if AUTH is not None else ''
-    ID = str(ID) if ID is not None else ''
+    ID = (str(ID) + "/") if ID is not None else ''
     data = data if data is not None else {}
+
     response = requests.request(
-        method=method, url=BASE_URL + ENDPOINT + AUTH, headers={'content-type': 'application/json', 'Authorization': 'JWT' + token}, data=json.dumps(data))
+        method=method, url=BASE_URL + ENDPOINT + AUTH + ID, headers=headers, data=json.dumps(data))
     return response
 
 
@@ -51,9 +54,9 @@ logging.info(token)
 
 
 post_data = {
-    'content': 'Fresh content from Request'
+    'content': 'Fresh updated content from Request'
 }
 
-res = send_request(method='post', data=post_data,
-                   token=token.get('token')).json()
+res = send_request(method='delete',
+                   token=token.get('token'), ID=12).json()
 logging.debug(res)
