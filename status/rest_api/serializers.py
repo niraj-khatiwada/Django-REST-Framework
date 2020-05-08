@@ -5,7 +5,8 @@ from ..models import StatusModel
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = StatusModel
-        fields = ['id','user', 'content', 'image']
+        fields = ['id', 'user', 'content', 'image']
+        read_only_fields = ['user']
 
     def validate(self, attrs):
         content = attrs.get('content')

@@ -4,13 +4,14 @@ from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework import mixins
 
-from rest_framework.permissions import AllowAny
+from rest_framework import permissions
+from rest_framework import authentication
 import json
 
 
 class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
-    authentication_classes = []
-    permission_classes = []
+    # authentication_classes = [authentication.SessionAuthentication]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = StatusSerializer
 
     def get_queryset(self):
@@ -30,21 +31,9 @@ class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
         return self.create(request, *args, **kwargs)
 
 
-# class StatusApiCreateView(generics.CreateAPIView):
-#     authentication_classes=[]
-#     permission_classes=[]
-#     serializer_class=StatusSerializer
-
-#     def get_queryset(self):
-#         q=StatusModel.objects.all()
-#         if self.request.GET.get('search') is not None:
-#             q=StatusModel.objects.filter(
-#                 content__icontains=self.request.GET.get('search'))
-#         return q
-
 class StatusApiRetrieveView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.RetrieveAPIView):
-    authentication_classes = []
-    permission_classes = []
+    # authentication_classes = [authentication.SessionAuthentication]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = StatusSerializer
 
     def get_object(self):
