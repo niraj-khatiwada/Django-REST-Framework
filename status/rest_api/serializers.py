@@ -6,3 +6,10 @@ class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = StatusModel
         fields = ['user', 'content', 'image']
+
+    def validate(self, attrs):
+        content = attrs.get('content')
+        content = None if content == '' else content
+        if content is None:
+            raise serializers.ValidationError('This field is required')
+        return attrs

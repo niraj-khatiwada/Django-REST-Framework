@@ -21,6 +21,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("updates.urls")),
+    path('api/', include('status.rest_api.urls'))
 
 
 ]
