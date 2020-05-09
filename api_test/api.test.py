@@ -1,8 +1,8 @@
 import requests
 import json
 
-BASE_URL = 'http://localhost:8000/api/'
-AUTH_ENDPOINT = 'obtain-jwt-auth/'
+BASE_URL = 'http://localhost:8000/'
+AUTH_ENDPOINT = 'accounts/obtain-jwt-auth/'
 
 
 def perform_request(method="get", data=None, ID='', headers={}, token=None, AUTH_ENDPOINT=''):
@@ -29,11 +29,11 @@ token = perform_request(method="post", data=credentials,
 print(token)
 
 
-data = {
-    'content': 'Post from request',
-}
+# data = {
+#     'content': 'Post from request',
+# }
 
-post_data = perform_request(
-    method="post", data=data, token=token['token'])
+# post_data = perform_request(
+#     method="post", data=data, token=token['token'])
 
-print(post_data.json())
+# print(post_data.json())

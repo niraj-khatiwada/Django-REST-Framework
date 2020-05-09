@@ -10,8 +10,6 @@ import json
 
 
 class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
-    # authentication_classes = [authentication.SessionAuthentication]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = StatusSerializer
 
     def get_queryset(self):
@@ -23,17 +21,18 @@ class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
 
     def get(self, request, *args, **kwargs):
         qs = self.get_queryset()
-        print("ashjbajsb", qs)
         serialize = StatusSerializer(qs, many=True)
+        print("Received HTTP", request.data)
         return Response(serialize.data)
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        return serializer.save(user=self.request.user)
+
 
 class StatusApiRetrieveView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.RetrieveAPIView):
-    # authentication_classes = [authentication.SessionAuthentication]
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = StatusSerializer
 
     def get_object(self):
