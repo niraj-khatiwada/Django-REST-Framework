@@ -6,8 +6,9 @@ from django.contrib.auth import authenticate
 from .utils import jwt_response_payload_handler
 from django.contrib.auth.models import User
 from rest_framework import generics
-
+from rest_framework import authentication
 from .serializers import RegisterSerializer
+from .permisiions import BlackListPermission
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -15,7 +16,7 @@ jwt_response_payload_hanlder = jwt_response_payload_handler
 
 
 class JWTAUTHAPIView(APIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [BlackListPermission]
 
     def post(self, request, *args, **kwargs):
         print(request.user)
@@ -56,7 +57,7 @@ class JWTAUTHAPIView(APIView):
 
 
 class RegisterSerializerView(generics.CreateAPIView):
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [BlackListPermission]
     serializer_class = RegisterSerializer
     queryset = User.objects.all()
 

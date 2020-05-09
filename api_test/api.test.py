@@ -21,14 +21,14 @@ def perform_request(method="get", data=None, ID=None, headers={}, token=None, AU
 
 
 credentials = {
-    'username': 'niraj29',
+    'username': 'niraj30',
     'password': 'nepal123',
     'password2': 'nepal123',
-    'email': 'niraj29@gmail.com'
+    'email': 'niraj30@gmail.com'
 }
 
 token = perform_request(method="post", data=credentials,
-                        AUTH_ENDPOINT=AUTH_ENDPOINT).json()
+                        AUTH_ENDPOINT=AUTH_ENDPOINT, token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyMSwidXNlcm5hbWUiOiJuaXJhajI5IiwiZXhwIjoxNTg5NjM4MjI2LCJlbWFpbCI6Im5pcmFqMjlAZ21haWwuY29tIn0.MH35S6GY99F78DjjDa2joxS0q5QxTeuGE0KK10yjNL4").json()
 print(token)
 
 
