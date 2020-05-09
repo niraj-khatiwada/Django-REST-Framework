@@ -1,18 +1,17 @@
 from .serializers import StatusSerializer
 from ..models import StatusModel
 from rest_framework.response import Response
-from rest_framework import generics
-from rest_framework import mixins
 
-from rest_framework import permissions
-from rest_framework import authentication
+from rest_framework import permissions, authentication, mixins, generics
 import json
 
 from accounts.rest_api.permisiions import IsOwnerOrReadOnly, BlackListPermission
+from .pagination import CustomPagination
 
 
 class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
     serializer_class = StatusSerializer
+    search_fields = ('user__username')
 
     def get_queryset(self):
         q = StatusModel.objects.all()
@@ -36,12 +35,10 @@ class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
 
 class StatusApiRetrieveView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.RetrieveAPIView):
     serializer_class = StatusSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     lookup_field = 'pk'
     queryset = StatusModel.objects.all()
-    # def get_object(self):
-    #     pk = self.kwargs.get('pk')
-    #     return StatusModel.objects.get(pk=pk)
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

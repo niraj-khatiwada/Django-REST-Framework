@@ -39,6 +39,6 @@ content = {
 # }
 
 post_data = perform_request(
-    method="put", data=content, ID=12, token=token_key, AUTH_ENDPOINT=API_ENDPOINT)
+    method="get", data=content, ID=12, token=token_key, AUTH_ENDPOINT=API_ENDPOINT)
 
 print(post_data.json())
