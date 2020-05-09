@@ -2,7 +2,7 @@ import requests
 import json
 
 BASE_URL = 'http://localhost:8000/'
-AUTH_ENDPOINT = 'accounts/register/'
+AUTH_ENDPOINT = 'accounts/obtain-jwt-auth/'
 API_ENDPOINT = 'api/'
 
 
@@ -21,22 +21,24 @@ def perform_request(method="get", data=None, ID=None, headers={}, token=None, AU
 
 
 credentials = {
-    'username': 'niraj30',
-    'password': 'nepal123',
-    'password2': 'nepal123',
-    'email': 'niraj30@gmail.com'
+    'username': 'niraj',
+    'password': 'nepal123'
 }
 
+
 token = perform_request(method="post", data=credentials,
-                        AUTH_ENDPOINT=AUTH_ENDPOINT, token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyMSwidXNlcm5hbWUiOiJuaXJhajI5IiwiZXhwIjoxNTg5NjM4MjI2LCJlbWFpbCI6Im5pcmFqMjlAZ21haWwuY29tIn0.MH35S6GY99F78DjjDa2joxS0q5QxTeuGE0KK10yjNL4").json()
+                        AUTH_ENDPOINT=AUTH_ENDPOINT,).json()
 print(token)
+token_key = token['token']['token']
 
-
+content = {
+    'content': 'oOOOOOOOOOAAAAAAAAPPPPPPPpppppppppa'
+}
 # data = {
 #     'content': 'Post from request 2',
 # }
 
-# post_data = perform_request(
-#     method="delete", data=data, token=token_key, AUTH_ENDPOINT=API_ENDPOINT, ID=14)
+post_data = perform_request(
+    method="put", data=content, ID=12, token=token_key, AUTH_ENDPOINT=API_ENDPOINT)
 
-# print(post_data.json())
+print(post_data.json())

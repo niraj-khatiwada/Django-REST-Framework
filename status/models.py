@@ -18,3 +18,7 @@ class StatusModel(models.Model):
         db_table = 'status'
         verbose_name = 'Status'
         verbose_name_plural = 'Statuses'
+
+    @property
+    def owner(self):
+        return self.user

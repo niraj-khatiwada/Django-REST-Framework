@@ -8,6 +8,8 @@ from rest_framework import permissions
 from rest_framework import authentication
 import json
 
+from accounts.rest_api.permisiions import IsOwnerOrReadOnly, BlackListPermission
+
 
 class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
     serializer_class = StatusSerializer
@@ -34,10 +36,12 @@ class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
 
 class StatusApiRetrieveView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.RetrieveAPIView):
     serializer_class = StatusSerializer
-
-    def get_object(self):
-        pk = self.kwargs.get('pk')
-        return StatusModel.objects.get(pk=pk)
+    permission_classes = [IsOwnerOrReadOnly]
+    lookup_field = 'pk'
+    queryset = StatusModel.objects.all()
+    # def get_object(self):
+    #     pk = self.kwargs.get('pk')
+    #     return StatusModel.objects.get(pk=pk)
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)
