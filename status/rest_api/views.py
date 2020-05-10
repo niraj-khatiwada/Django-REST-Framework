@@ -2,7 +2,7 @@ from .serializers import StatusSerializer
 from ..models import StatusModel
 from rest_framework.response import Response
 
-from rest_framework import permissions, authentication, mixins, generics
+from rest_framework import permissions, authentication, mixins, generics, pagination
 import json
 
 from accounts.rest_api.permisiions import IsOwnerOrReadOnly, BlackListPermission
@@ -11,26 +11,18 @@ from .pagination import CustomPagination
 
 class StatusApiView(mixins.CreateModelMixin, generics.ListAPIView):
     serializer_class = StatusSerializer
-    search_fields = ('user__username')
-
-    def get_queryset(self):
-        q = StatusModel.objects.all()
-        if self.request.GET.get('search') is not None:
-            q = StatusModel.objects.filter(
-                content__icontains=self.request.GET.get('search'))
-        return q
-
-    def get(self, request, *args, **kwargs):
-        qs = self.get_queryset()
-        serialize = StatusSerializer(qs, many=True)
-        print("Received HTTP", request.data)
-        return Response(serialize.data)
+    queryset = StatusModel.objects.all()
+    search_fields = ('username')
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         return serializer.save(user=self.request.user)
+
+    def get_serializer_context(self):
+        context = {'request': self.request}
+        return context
 
 
 class StatusApiRetrieveView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, generics.RetrieveAPIView):
@@ -45,3 +37,7 @@ class StatusApiRetrieveView(mixins.UpdateModelMixin, mixins.DestroyModelMixin, g
 
     def delete(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
+
+    def get_serializer_context(self):
+        context = {'request': self.request}
+        return context

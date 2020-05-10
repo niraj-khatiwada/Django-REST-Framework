@@ -2,6 +2,7 @@ from rest_framework import serializers
 from ..models import StatusModel
 from django.contrib.auth.models import User
 from django.conf import settings
+from rest_framework.reverse import reverse_lazy as api_reverse
 
 
 class PublicDisplaySerializer(serializers.ModelSerializer):
@@ -16,7 +17,8 @@ class StatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = StatusModel
-        fields = ['id', 'user', 'content', 'image', 'detail_url']
+        fields = ['id', 'user', 'content',
+                  'image', 'detail_url']
         read_only_fields = ['user']
 
     def validate(self, attrs):
@@ -27,4 +29,4 @@ class StatusSerializer(serializers.ModelSerializer):
         return attrs
 
     def get_detail_url(self, instance):
-        return f'{settings.ALLOWED_HOSTS[0]}:8000/api/{instance.id}'
+        return api_reverse(viewname='detail', kwargs={'pk': instance.pk}, request=self.context.get('request'))
